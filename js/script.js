@@ -55,7 +55,9 @@ var goodsConst = {
   RAITING_NUMBER_MAX: 900,
 
   ENERGY_MIN: 70,
-  ENERGY_MAX: 500
+  ENERGY_MAX: 500,
+  IMG_PATH = 'img/cards/',
+  IMG_TYPE = ''
 };
 
 var goodsComponents = [
@@ -80,34 +82,34 @@ var goodsComponents = [
 ];
 
 var goodsPictures = [
-  '/img/cards/gum-cedar.jpg',
-  '/img/cards/gum-chile.jpg',
-  '/img/cards/gum-eggplant.jpg',
-  '/img/cards/gum-mustard.jpg',
-  '/img/cards/gum-portwine.jpg',
-  '/img/cards/gum-wasabi.jpg',
-  '/img/cards/ice-cucumber.jpg',
-  '/img/cards/ice-eggplant.jpg',
-  '/img/cards/ice-garlic.jpg',
-  '/img/cards/ice-italian.jpg',
-  '/img/cards/ice-mushroom.jpg',
-  '/img/cards/ice-pig.jpg',
-  '/img/cards/marmalade-beer.jpg',
-  '/img/cards/marmalade-caviar.jpg',
-  '/img/cards/marmalade-corn.jpg',
-  '/img/cards/marmalade-new-year.jpg',
-  '/img/cards/marmalade-sour.jpg',
-  '/img/cards/marshmallow-bacon.jpg',
-  '/img/cards/marshmallow-beer.jpg',
-  '/img/cards/marshmallow-shrimp.jpg',
-  '/img/cards/marshmallow-spicy.jpg',
-  '/img/cards/marshmallow-wine.jpg',
-  '/img/cards/soda-bacon.jpg',
-  '/img/cards/soda-celery.jpg',
-  '/img/cards/soda-cob.jpg',
-  '/img/cards/soda-garlic.jpg',
-  '/img/cards/soda-peanut-grapes.jpg',
-  '/img/cards/soda-russian.jpg'
+  'gum-cedar',
+  'gum-chile',
+  'gum-eggplant',
+  'gum-mustard',
+  'gum-portwine',
+  'gum-wasabi',
+  'ice-cucumber',
+  'ice-eggplant',
+  'ice-garlic',
+  'ice-italian',
+  'ice-mushroom',
+  'ice-pig',
+  'marmalade-beer',
+  'marmalade-caviar',
+  'marmalade-corn',
+  'marmalade-new-year',
+  'marmalade-sour',
+  'marshmallow-bacon',
+  'marshmallow-beer',
+  'marshmallow-shrimp',
+  'marshmallow-spicy',
+  'marshmallow-wine',
+  'soda-bacon',
+  'soda-celery',
+  'soda-cob',
+  'soda-garlic',
+  'soda-peanut-grapes',
+  'soda-russian'
 ];
 
 var generateRandomInteger = function (min, max) {
@@ -115,41 +117,35 @@ var generateRandomInteger = function (min, max) {
 };
 
 var generateRandomBoolean = function () {
-  var boolean_random = Math.random() >= 0.5;
+  var boolean_random = Math.random() > 0.5;
   return Boolean(boolean_random);
 };
 
-var checkAvailability = function (array, value) {
-  for (var i = 0; i < array.length; i++) {
-    if (array[i] === value) {
-      return true;
-    }
-  }
-  return false;
+var pickRandomItem = function (array) {
+  return array[generateRandomInteger(0, array.length - 1)];
 };
 
 var generateNutritionContents = function (array) {
-  var NutritionContents = [];
+  var nutritionContents = [];
   var contentsLength = generateRandomInteger(1, array.length);
   for (var i = 0; i < contentsLength; i++) {
-    var nutritionComponentPosition = generateRandomInteger(0, contentsLength - 1);
-    NutritionContents.push(nutritionComponentPosition);
-    if (!checkAvailability(NutritionContents, nutritionComponentPosition)) {
-      NutritionContents.push(array[nutritionComponentPosition])
+    var nutritionComponent = pickRandomItem(array);
+    if (nutritionContents.indexOf(nutritionComponent) !== -1) {
+      nutritionContents.push(nutritionComponent)
     }
   }
 
   var contents = '';
-  for (var i = 0; NutritionContents.length; i++) {
-    contents = contents + ', ' + NutritionContents[i];
+  for (var i = 0; nutritionContents.length; i++) {
+    contents = contents + ', ' + nutritionContents[i];
   }
   return contents;
 };
 
 var generateGoods = function (goodsNumber) {
   for (var i = 0; i < goodsNumber; i++) {
-    var productName = goodsNames[generateRandomInteger(0, goodsNames.length - 1)];
-    var productPicture = goodsPictures[generateRandomInteger(0, goodsNames.length - 1)];
+    var productName = pickRandomItem(goodsNames);
+    var productPicture = goodsConst.IMG_PATH + pickRandomItem(goodsPictures) + goodsConst.IMG_TYPE;
     var productAmount = generateRandomInteger(goodsConst.AMOUNT_MIN, goodsConst.AMOUNT_MAX);
     var productPrice = generateRandomInteger(goodsConst.PRICE_MIN, goodsConst.PRICE_MAX);
     var productWeight = generateRandomInteger(goodsConst.WEIGHT_MIN, goodsConst.WEIGHT_MAX);
@@ -181,17 +177,23 @@ generateGoods(goodsConst.GOODS_NUMBER);
 var generateTextRaiting = function (raiting) {
   var raitingClass = '';
 
-  if (raiting === 1) {
-    raitingClass = 'stars__rating--one';
-  } else if (raiting === 2) {
-    raitingClass = 'stars__rating--two';
-  } else if (raiting === 3) {
-    raitingClass = 'stars__rating--three';
-  } else if (raiting === 4) {
-    raitingClass = 'stars__rating--four';
-  } else if (raiting === 5) {
-    raitingClass = 'stars__rating--five';
+  switch (raiting) {
+    case 1:
+      raitingClass = 'stars__rating--one';
+      break;
+    case 2:
+      raitingClass = 'stars__rating--two';
+      break;
+    case 3:
+      raitingClass = 'stars__rating--three';
+      break;
+    case 4:
+      raitingClass = 'stars__rating--four';
+      break;
+    case 5:
+      raitingClass = 'stars__rating--five';
   }
+
 
   return raitingClass;
 };
@@ -201,7 +203,7 @@ var goodsCreator = function (array) {
   var fragment = document.createDocumentFragment();
 
 
-  for (var i = 0; array.length; i++) {
+  for (var i = 0; i < array.length; i++) {
     var newCard = template.cloneNode(true);
 
     if (array[i].amount === 0) {
@@ -216,7 +218,7 @@ var goodsCreator = function (array) {
     cardTitle.textContent = array[i].name;
 
     var cardImg = newCard.content.querySelector('.card__img');
-    cardImg.setAttribute(src, array[i].picture);
+    cardImg.src = array[i].picture;
 
     var cardPrice = newCard.content.querySelector('.card__price');
     cardPrice.innerHTML = array[i].price + ' <span class="card__currency">₽</span><span class="card__weight">/ ' + array[i].weight + ' Г</span>';
@@ -250,7 +252,7 @@ var goodsInCartCreator = function (array) {
   var template = document.querySelector('.goods_card');
   var fragment = document.createDocumentFragment();
 
-  for (var i = 0; array.length; i++) {
+  for (var i = 0; i < array.length; i++) {
     var newCard = template.cloneNode(true);
 
     var cardInCartTitle = newCard.content.querySelector('.card-order__title');
@@ -260,7 +262,7 @@ var goodsInCartCreator = function (array) {
     cardInCartPrice.textContent = array[i].price + ' ₽';
 
     var cardInCartImg = newCard.content.querySelector('.card-order__img');
-    cardInCartImg.setAttribute(src, array[i].picture);
+    cardInCartImg.src = array[i].picture;
   }
 
   var cardsHolder = document.querySelector('.goods__cards');
