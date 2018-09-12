@@ -134,8 +134,8 @@ var generateNutritionContents = function (array) {
   }
 
   var contents = '';
-  for (var i = 0; nutritionContents.length; i++) {
-    contents = contents + ', ' + nutritionContents[i];
+  for (var j = 0; nutritionContents.length; j++) {
+    contents = contents + ', ' + nutritionContents[j];
   }
   return contents;
 };
