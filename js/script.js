@@ -115,8 +115,8 @@ var generateRandomInteger = function (min, max) {
 };
 
 var generateRandomBoolean = function () {
-  var boolean_random = Math.random() > 0.5;
-  return Boolean(boolean_random);
+  var booleanRandom = Math.random() > 0.5;
+  return Boolean(booleanRandom);
 };
 
 var pickRandomItem = function (array) {
@@ -129,7 +129,7 @@ var generateNutritionContents = function (array) {
   for (var i = 0; i < contentsLength; i++) {
     var nutritionComponent = pickRandomItem(array);
     if (nutritionContents.indexOf(nutritionComponent) !== -1) {
-      nutritionContents.push(nutritionComponent)
+      nutritionContents.push(nutritionComponent);
     }
   }
 
@@ -169,12 +169,12 @@ var generateGoods = function (array, goodsNumber) {
         energy: productEnergy,
         contents: generateNutritionContents(goodsComponents)
       }
-    }
+    };
   }
 };
 
 generateGoods(goods, goodsConst.GOODS_NUMBER);
-generateGoods(goodsInCart, goodsConst.GOODS_IN_CART)
+generateGoods(goodsInCart, goodsConst.GOODS_IN_CART);
 
 var generateTextRaiting = function (raiting) {
   var raitingClass = '';
@@ -280,7 +280,7 @@ var goodsInCartCreator = function (array) {
     cardInCartImg.alt = array[i].name;
   }
 
-    cardsHolder.appendChild(fragment);
+  cardsHolder.appendChild(fragment);
 };
 
 goodsInCartCreator(goodsInCart);
