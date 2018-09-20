@@ -201,10 +201,10 @@ var generateTextRaiting = function (raiting) {
 };
 
 var catalogCards = document.querySelector('.catalog__cards');
-// catalogCards.classList.remove('catalog__cards--load');
+catalogCards.classList.remove('catalog__cards--load');
 
 var catalogLoad = document.querySelector('.catalog__load');
-// catalogLoad.classList.add('visually-hidden');
+catalogLoad.classList.add('visually-hidden');
 
 var goodsCreator = function (array) {
   var template = document.querySelector('#card').content.querySelector('.catalog__card');
@@ -257,16 +257,16 @@ var goodsCreator = function (array) {
 goodsCreator(goods);
 
 var cardsHolder = document.querySelector('.goods__cards');
-// cardsHolder.classList.remove('goods__cards--empty');
+cardsHolder.classList.remove('goods__cards--empty');
 
 var cardsEmpty = document.querySelector('.goods__card-empty');
-// cardsEmpty.classList.add('visually-hidden');
+cardsEmpty.classList.add('visually-hidden');
 
 var goodsInCartCreator = function (array) {
   var template = document.querySelector('#card-order').content.querySelector('.goods_card');
   var fragment = document.createDocumentFragment();
 
-  for (var i = 0; i < array.length; i++) {
+  for (var i = 0; i < 3; i++) {
     var newCard = template.cloneNode(true);
 
     var cardInCartTitle = newCard.querySelector('.card-order__title');
@@ -278,6 +278,8 @@ var goodsInCartCreator = function (array) {
     var cardInCartImg = newCard.querySelector('.card-order__img');
     cardInCartImg.src = array[i].picture;
     cardInCartImg.alt = array[i].name;
+
+    fragment.appendChild(newCard);
   }
 
   cardsHolder.appendChild(fragment);
