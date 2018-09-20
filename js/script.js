@@ -201,10 +201,10 @@ var generateTextRaiting = function (raiting) {
 };
 
 var catalogCards = document.querySelector('.catalog__cards');
-catalogCards.classList.remove('catalog__cards--load');
+// catalogCards.classList.remove('catalog__cards--load');
 
 var catalogLoad = document.querySelector('.catalog__load');
-catalogLoad.classList.add('visually-hidden');
+// catalogLoad.classList.add('visually-hidden');
 
 var goodsCreator = function (array) {
   var template = document.querySelector('#card').content.querySelector('.catalog__card');
@@ -257,10 +257,10 @@ var goodsCreator = function (array) {
 goodsCreator(goods);
 
 var cardsHolder = document.querySelector('.goods__cards');
-cardsHolder.classList.remove('goods__cards--empty');
+// cardsHolder.classList.remove('goods__cards--empty');
 
 var cardsEmpty = document.querySelector('.goods__card-empty');
-cardsEmpty.classList.add('visually-hidden');
+// cardsEmpty.classList.add('visually-hidden');
 
 var goodsInCartCreator = function (array) {
   var template = document.querySelector('#card-order').content.querySelector('.goods_card');
@@ -284,3 +284,153 @@ var goodsInCartCreator = function (array) {
 };
 
 goodsInCartCreator(goodsInCart);
+
+// Выбор способа оплаты
+
+var toggleCash = document.querySelector('#payment__cash');
+var toggleCard = document.querySelector('#payment__card');
+var paymentByCash = document.querySelector('.payment__cash-wrap');
+var paymentByCard = document.querySelector('.payment__card-wrap');
+var cardInputs = paymentByCard.querySelectorAll('.text-input__input');
+
+toggleCash.addEventListener('change', function () {
+  if (toggleCash.checked) {
+    paymentByCard.classList.add('visually-hidden');
+    paymentByCash.classList.remove('visually-hidden');
+    cardInputs.forEach(function (element) {
+      element.disabled = true;
+    });
+  }
+});
+
+toggleCard.addEventListener('change', function () {
+  if (toggleCard.checked) {
+    paymentByCash.classList.add('visually-hidden');
+    paymentByCard.classList.remove('visually-hidden');
+    cardInputs.forEach(function (element) {
+      element.disabled = false;
+    });
+  }
+});
+
+// Выбор способа доставки
+
+var toggleDeliverStore = document.querySelector('#deliver__store');
+var toggleDeliverCourier = document.querySelector('#deliver__courier');
+var deliverStore = document.querySelector('.deliver__store');
+var deliverCourier = document.querySelector('.deliver__courier');
+var deliverStoreInputs = deliverStore.querySelectorAll('.input-btn__input');
+var deliverCourierInputs = deliverCourier.querySelectorAll('.text-input__input');
+
+toggleDeliverStore.addEventListener('change', function () {
+  if (toggleDeliverStore.checked) {
+    deliverCourier.classList.add('visually-hidden');
+    deliverStore.classList.remove('visually-hidden');
+    deliverStoreInputs.forEach(function (element) {
+      element.disabled = false;
+    });
+    deliverCourierInputs.forEach(function (element) {
+      element.disabled = true;
+    });
+  }
+});
+
+toggleDeliverCourier.addEventListener('change', function () {
+  if (toggleDeliverCourier.checked) {
+    deliverStore.classList.add('visually-hidden');
+    deliverCourier.classList.remove('visually-hidden');
+    deliverCourierInputs.forEach(function (element) {
+      element.disabled = false;
+    });
+    deliverStoreInputs.forEach(function (element) {
+      element.disabled = true;
+    });
+  }
+});
+
+// Слайдер
+
+var rangeFilter = document.querySelector('.range__filter');
+var rangeButtonRight = document.querySelector('.range__btn--right');
+var rangeButtonLeft = document.querySelector('.range__btn--left');
+var rangePriceMax = document.querySelector('.range__price--max');
+var rangePriceMin = document.querySelector('.range__price--min');
+
+var deleteLastSymbol = function (str) {
+  return str.substring(0, str.length - 1);
+};
+
+rangeFilter.addEventListener('mouseup', function (evt) {
+  if (evt.target.classList.contains('range__btn--right')) {
+    rangePriceMax.textContent = 100 - deleteLastSymbol(rangeButtonRight.style.right);
+  } else if (evt.target.classList.contains('range__btn--left')) {
+    rangePriceMin.textContent = deleteLastSymbol(rangeButtonLeft.style.left);
+    if (rangePriceMin.textContent === '') {
+      rangePriceMin.textContent = 0;
+    }
+  }
+});
+
+// Избранное
+
+catalogCards.addEventListener('click', function (evt) {
+  if (evt.target.classList.contains('card__btn-favorite')) {
+    evt.target.classList.toggle('card__btn-favorite--selected');
+  }
+
+});
+
+// Добавление в корзину
+
+var findObject = function (array, condition) {
+  for (var i = 0; i < array.length; i++) {
+    if (array[i].name === condition) {
+      return true;
+    }
+  }
+
+  return false;
+};
+
+var copyObject = function (array, condition) {
+  var filterByName = function (obj) {
+    if (obj.name === condition) {
+      return true;
+    }
+  };
+  var filteredArray = array.filter(filterByName);
+  var copy = Object.assign({}, filteredArray[0]);
+
+  return copy;
+};
+
+var modifyObject = function (obj) {
+  delete obj.amount
+  obj.orderedAmount = 1;
+
+  return obj
+};
+
+catalogCards.addEventListener('click', function (evt) {
+  if (evt.target.classList.contains('card__btn')) {
+    var currentProduct = evt.target.closest('.catalog__card');
+    var productName = currentProduct.querySelector('.card__title').textContent;
+
+    var isProductName = function (obj) {
+      return obj.name === productName;
+    };
+
+    var objectInCatalog = goods.find(isProductName);
+    if (objectInCatalog.amount > 0) {
+      var productObject = copyObject(goods, productName);
+      var modifiedObject = modifyObject(productObject);
+      if (findObject(goodsInCart, productName)) {
+        var objectInCart = goodsInCart.find(isProductName);
+        objectInCart.orderedAmount++;
+      } else {
+        goodsInCart.push(modifiedObject);
+      }
+      objectInCatalog.amount--;
+    }
+  }
+});
