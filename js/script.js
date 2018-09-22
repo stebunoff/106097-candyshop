@@ -174,7 +174,6 @@ var generateGoods = function (array, goodsNumber) {
 };
 
 generateGoods(goods, goodsConst.GOODS_NUMBER);
-generateGoods(goodsInCart, goodsConst.GOODS_IN_CART);
 
 var generateTextRaiting = function (raiting) {
   var raitingClass = '';
@@ -201,10 +200,7 @@ var generateTextRaiting = function (raiting) {
 };
 
 var catalogCards = document.querySelector('.catalog__cards');
-catalogCards.classList.remove('catalog__cards--load');
-
 var catalogLoad = document.querySelector('.catalog__load');
-catalogLoad.classList.add('visually-hidden');
 
 var goodsCreator = function (array) {
   var template = document.querySelector('#card').content.querySelector('.catalog__card');
@@ -252,6 +248,10 @@ var goodsCreator = function (array) {
   }
 
   catalogCards.appendChild(fragment);
+
+
+  catalogCards.classList.remove('catalog__cards--load');
+  catalogLoad.classList.add('visually-hidden');
 };
 
 goodsCreator(goods);
@@ -259,33 +259,101 @@ goodsCreator(goods);
 var cardsHolder = document.querySelector('.goods__cards');
 cardsHolder.classList.remove('goods__cards--empty');
 
-var cardsEmpty = document.querySelector('.goods__card-empty');
-cardsEmpty.classList.add('visually-hidden');
+var headerBasket = document.querySelector('.main-header__basket');
 
-var goodsInCartCreator = function (array) {
+var checkCartText = function () {
+  if (goodsInCart.length > 0) {
+    headerBasket.textContent = 'В корзине товаров: ' + goodsInCart.length;
+  } else if (goodsInCart.length === 0) {
+    headerBasket.textContent = 'В корзине ничего нет';
+  }
+};
+
+var deleteProduct = function (evt) {
+  var targetProduct = evt.target.closest('.goods_card');
+  var targetProductName = targetProduct.querySelector('.card-order__title').textContent;
+  targetProduct.remove();
+
+  for (var i = 0; i < goodsInCart.length; i++) {
+    if (goodsInCart[i].name === targetProductName) {
+      goodsInCart.splice(i - 1, 1);
+    }
+  }
+
+  checkCartText();
+
+  if (cardsHolder.querySelector('.goods_card') === null) {
+    cardsEmpty.classList.remove('visually-hidden');
+  }
+};
+
+var goodsInCartCreator = function (obj) {
   var template = document.querySelector('#card-order').content.querySelector('.goods_card');
   var fragment = document.createDocumentFragment();
 
-  for (var i = 0; i < 3; i++) {
-    var newCard = template.cloneNode(true);
+  var newCard = template.cloneNode(true);
 
-    var cardInCartTitle = newCard.querySelector('.card-order__title');
-    cardInCartTitle.textContent = array[i].name;
+  var cardInCartTitle = newCard.querySelector('.card-order__title');
+  cardInCartTitle.textContent = obj.name;
 
-    var cardInCartPrice = newCard.querySelector('.card-order__price');
-    cardInCartPrice.textContent = array[i].price + ' ₽';
+  var cardInCartPrice = newCard.querySelector('.card-order__price');
+  cardInCartPrice.textContent = obj.price + ' ₽';
 
-    var cardInCartImg = newCard.querySelector('.card-order__img');
-    cardInCartImg.src = array[i].picture;
-    cardInCartImg.alt = array[i].name;
+  var cardInCartImg = newCard.querySelector('.card-order__img');
+  cardInCartImg.src = obj.picture;
+  cardInCartImg.alt = obj.name;
 
-    fragment.appendChild(newCard);
-  }
+  var cardInCartAmount = newCard.querySelector('.card-order__count');
+  cardInCartAmount.value = 1;
+
+  var deleteCardInCart = newCard.querySelector('.card-order__close');
+  deleteCardInCart.addEventListener('click', function (evt) {
+    deleteProduct(evt);
+  });
+
+  var increaseButton = newCard.querySelector('.card-order__btn--increase');
+  increaseButton.addEventListener('click', function (evt) {
+    var currentProduct = evt.target.closest('.goods_card');
+    var productName = currentProduct.querySelector('.card-order__title').textContent;
+
+    var isProductName = function (object) {
+      return object.name === productName;
+    };
+
+    var objectInCatalog = goods.find(isProductName);
+    if (objectInCatalog.amount > 0) {
+      var productAmountLabel = evt.target.closest('.card-order__amount');
+      var productCount = productAmountLabel.querySelector('.card-order__count');
+      productCount.value++;
+      objectInCatalog.amount--;
+    }
+  });
+
+  var decreaseButton = newCard.querySelector('.card-order__btn--decrease');
+  decreaseButton.addEventListener('click', function (evt) {
+    var currentProduct = evt.target.closest('.goods_card');
+    var productName = currentProduct.querySelector('.card-order__title').textContent;
+
+    var isProductName = function (object) {
+      return object.name === productName;
+    };
+
+    var objectInCatalog = goods.find(isProductName);
+
+    var productAmountLabel = evt.target.closest('.card-order__amount');
+    var productCount = productAmountLabel.querySelector('.card-order__count');
+    objectInCatalog.amount++;
+    if (productCount.value > 1) {
+      productCount.value--;
+    } else {
+      deleteProduct(evt);
+    }
+  });
+
+  fragment.appendChild(newCard);
 
   cardsHolder.appendChild(fragment);
 };
-
-goodsInCartCreator(goodsInCart);
 
 // Выбор способа оплаты
 
@@ -399,6 +467,8 @@ var copyObject = function (array, condition) {
     if (obj.name === condition) {
       return true;
     }
+
+    return false;
   };
   var filteredArray = array.filter(filterByName);
   var copy = Object.assign({}, filteredArray[0]);
@@ -407,11 +477,26 @@ var copyObject = function (array, condition) {
 };
 
 var modifyObject = function (obj) {
-  delete obj.amount
+  delete obj.amount;
   obj.orderedAmount = 1;
 
-  return obj
+  return obj;
 };
+
+var increaseOrderedNumber = function (searchedElement, objectInCart) {
+  objectInCart.orderedAmount++;
+
+  var cards = cardsHolder.querySelectorAll('.goods_card');
+  for (var i = 0; i < cards.length; i++) {
+    var cardTitle = cards[i].querySelector('.card-order__title');
+    if (cardTitle.textContent === searchedElement) {
+      var orderedNumber = cards[i].querySelector('.card-order__count');
+      orderedNumber.value++;
+    }
+  }
+};
+
+var cardsEmpty = document.querySelector('.goods__card-empty');
 
 catalogCards.addEventListener('click', function (evt) {
   if (evt.target.classList.contains('card__btn')) {
@@ -428,9 +513,13 @@ catalogCards.addEventListener('click', function (evt) {
       var modifiedObject = modifyObject(productObject);
       if (findObject(goodsInCart, productName)) {
         var objectInCart = goodsInCart.find(isProductName);
-        objectInCart.orderedAmount++;
+        increaseOrderedNumber(productName, objectInCart);
       } else {
+        goodsInCartCreator(modifiedObject);
         goodsInCart.push(modifiedObject);
+
+        checkCartText();
+        cardsEmpty.classList.add('visually-hidden');
       }
       objectInCatalog.amount--;
     }
