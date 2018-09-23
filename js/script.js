@@ -259,6 +259,25 @@ goodsCreator(goods);
 var cardsHolder = document.querySelector('.goods__cards');
 cardsHolder.classList.remove('goods__cards--empty');
 
+// Управление формой заказа в зависимости от наличия товаров в корзине
+
+var contactData = document.querySelector('.contact-data__inputs');
+var contactDataInputs = contactData.querySelectorAll('.text-input__input');
+
+var disableCheckout = function () {
+  for (var i = 0; i < contactDataInputs.length; i++) {
+    contactDataInputs[i].disabled = true;
+  }
+};
+
+disableCheckout();
+
+var enableCheckout = function () {
+  for (var i = 0; i < contactDataInputs.length; i++) {
+    contactDataInputs[i].disabled = false;
+  }
+};
+
 var headerBasket = document.querySelector('.main-header__basket');
 
 var checkCartText = function () {
@@ -309,6 +328,9 @@ var goodsInCartCreator = function (obj) {
   var deleteCardInCart = newCard.querySelector('.card-order__close');
   deleteCardInCart.addEventListener('click', function (evt) {
     deleteProduct(evt);
+    if (goodsInCart.length === 0) {
+      disableCheckout();
+    }
   });
 
   var increaseButton = newCard.querySelector('.card-order__btn--increase');
@@ -347,12 +369,16 @@ var goodsInCartCreator = function (obj) {
       productCount.value--;
     } else {
       deleteProduct(evt);
+      if (goodsInCart.length === 0) {
+        disableCheckout();
+      }
     }
   });
 
   fragment.appendChild(newCard);
 
   cardsHolder.appendChild(fragment);
+  enableCheckout();
 };
 
 // Выбор способа оплаты
