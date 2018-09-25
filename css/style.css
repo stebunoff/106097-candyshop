@@ -1355,3 +1355,6 @@ body {
   padding-bottom: 0;
 }
 
+a:hover {
+  cursor: pointer;
+}
