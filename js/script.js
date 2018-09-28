@@ -593,3 +593,53 @@ catalogCards.addEventListener('click', function (evt) {
     }
   }
 });
+
+// Проверка полей ввода
+
+var cardStatus = document.querySelector('.payment__card-status');
+
+var validateByLuna = function (value) {
+  var summ = 0;
+  var values = value.split('');
+  values.forEach(function (element, index) {
+    element = parseInt(element, 10);
+    if (index % 2 === 0) {
+      element = element * 2;
+      if (element > 9) {
+        element = element - 9;
+      }
+    }
+    summ = summ + element;
+  });
+  return Boolean(!(summ % 10))
+};
+
+var validate = function (fields) {
+  var validationStatus = [];
+  fields.forEach(function (element) {
+    if (!element.value) {
+      validationStatus.push(false);
+    } else if (element.name === 'card-number') {
+      validationStatus.push(validateByLuna(element.value));
+    }
+  });
+  console.log(validationStatus);
+  for (var i = 0; i < validationStatus.length;i++) {
+    if (!validationStatus[i]) {
+      return false;
+      break;
+    }
+  }
+  return true;
+};
+
+for (var i = 0; i < cardInputs.length; i++) {
+  cardInputs[i].addEventListener('change', function () {
+    console.log(validate(cardInputs));
+    if (validate(cardInputs)) {
+      cardStatus.textContent = 'Одобрен';
+    } else {
+      cardStatus.textContent = 'Неизвестен';
+    }
+  });
+};
