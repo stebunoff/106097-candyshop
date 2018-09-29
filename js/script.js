@@ -38,7 +38,8 @@ var classConst = {
   CARD_ORDER_IMG: '.card-order__img',
   CARD_ORDER_PRICE: '.card-order__price',
   CARD_CHAR: '.card__characteristic',
-  EMPTY_CART: '.goods__card-empty'
+  EMPTY_CART: '.goods__card-empty',
+  PAYMENT_CARD_STATUS: '.payment__card-status'
 };
 
 var goodsNames = [
@@ -473,6 +474,10 @@ var deliverCourier = document.querySelector(classConst.DELIVER_COURIER);
 var deliverStoreInputs = deliverStore.querySelectorAll(classConst.BTN_INPUT);
 var deliverCourierInputs = deliverCourier.querySelectorAll(classConst.TEX_TINPUT);
 
+var deliverStreet = document.querySelector('#deliver__street');
+var deliverHouse = document.querySelector('#deliver__house');
+var deliverRoom = document.querySelector('#deliver__room');
+
 toggleDeliverStore.addEventListener('change', function () {
   if (toggleDeliverStore.checked) {
     deliverCourier.classList.add(classConst.VISUALLY_HIDDEN);
@@ -483,6 +488,10 @@ toggleDeliverStore.addEventListener('change', function () {
     deliverCourierInputs.forEach(function (element) {
       element.disabled = true;
     });
+
+    deliverStreet.required = true;
+    deliverHouse.required = true;
+    deliverRoom.required = true;
   }
 });
 
@@ -496,6 +505,10 @@ toggleDeliverCourier.addEventListener('change', function () {
     deliverStoreInputs.forEach(function (element) {
       element.disabled = true;
     });
+
+    deliverStreet.required = false;
+    deliverHouse.required = false;
+    deliverRoom.required = false;
   }
 });
 
@@ -596,7 +609,8 @@ catalogCards.addEventListener('click', function (evt) {
 
 // Проверка полей ввода
 
-var cardStatus = document.querySelector('.payment__card-status');
+var cardStatus = document.querySelector(classConst.PAYMENT_CARD_STATUS);
+var paymentCardNumber = document.querySelector('#payment__card-number');
 
 var validateByLuna = function (value) {
   var summ = 0;
@@ -611,7 +625,10 @@ var validateByLuna = function (value) {
     }
     summ = summ + element;
   });
-  return Boolean(!(summ % 10))
+  if (!(summ % 10 === 0)) {
+    paymentCardNumber.setCustomValidity('Карты с таким номером не существует.');
+  }
+  return Boolean(!(summ % 10));
 };
 
 var validate = function (fields) {
@@ -623,11 +640,9 @@ var validate = function (fields) {
       validationStatus.push(validateByLuna(element.value));
     }
   });
-  console.log(validationStatus);
-  for (var i = 0; i < validationStatus.length;i++) {
+  for (var i = 0; i < validationStatus.length; i++) {
     if (!validationStatus[i]) {
       return false;
-      break;
     }
   }
   return true;
@@ -635,11 +650,10 @@ var validate = function (fields) {
 
 for (var i = 0; i < cardInputs.length; i++) {
   cardInputs[i].addEventListener('change', function () {
-    console.log(validate(cardInputs));
     if (validate(cardInputs)) {
       cardStatus.textContent = 'Одобрен';
     } else {
       cardStatus.textContent = 'Неизвестен';
     }
   });
-};
+}
