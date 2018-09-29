@@ -611,6 +611,9 @@ catalogCards.addEventListener('click', function (evt) {
 
 var cardStatus = document.querySelector(classConst.PAYMENT_CARD_STATUS);
 var paymentCardNumber = document.querySelector('#payment__card-number');
+var paymentCardCvc = document.querySelector('#payment__card-cvc');
+var paymentCardHolder = document.querySelector('#payment__cardholder');
+var paymentCardDate = document.querySelector('#payment__card-date');
 
 var validateByLuna = function (value) {
   var summ = 0;
@@ -638,6 +641,15 @@ var validate = function (fields) {
       validationStatus.push(false);
     } else if (element.name === 'card-number') {
       validationStatus.push(validateByLuna(element.value));
+    } else if ((element.name === 'card-cvc') && (element.value.match(/[0-9]/) === null)) {
+      validationStatus.push(false);
+      paymentCardCvc.setCustomValidity('CVC-код должен содержать только цифры.');
+    } else if ((element.name === 'cardholder') && !(element.value.match(/[0-9]/) === null)) {
+      paymentCardHolder.setCustomValidity('Имя держателя не должно содержать цифры.');
+      validationStatus.push(false);
+    } else if ((element.name === 'card-date') && (element.value.match(/\//) === null)) {
+      paymentCardDate.setCustomValidity('Заполните поле по шаблону: ММ/ГГ');
+      validationStatus.push(false);
     }
   });
   for (var i = 0; i < validationStatus.length; i++) {
