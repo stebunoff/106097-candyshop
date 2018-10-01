@@ -39,7 +39,8 @@ var classConst = {
   CARD_ORDER_PRICE: '.card-order__price',
   CARD_CHAR: '.card__characteristic',
   EMPTY_CART: '.goods__card-empty',
-  PAYMENT_CARD_STATUS: '.payment__card-status'
+  PAYMENT_CARD_STATUS: '.payment__card-status',
+  CHECKOUT_FORM: '.checkout-form'
 };
 
 var goodsNames = [
@@ -661,7 +662,7 @@ var validate = function (fields) {
 };
 
 for (var i = 0; i < cardInputs.length; i++) {
-  cardInputs[i].addEventListener('change', function () {
+  cardInputs[i].addEventListener('blur', function () {
     if (validate(cardInputs)) {
       cardStatus.textContent = 'Одобрен';
     } else {
@@ -669,3 +670,12 @@ for (var i = 0; i < cardInputs.length; i++) {
     }
   });
 }
+
+var checkoutForm = document.querySelector(classConst.CHECKOUT_FORM);
+checkoutForm.addEventListener('submit', function () {
+  if (validate(cardInputs)) {
+    return true;
+  } else {
+    return false;
+  }
+});
