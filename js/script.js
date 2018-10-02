@@ -38,7 +38,9 @@ var classConst = {
   CARD_ORDER_IMG: '.card-order__img',
   CARD_ORDER_PRICE: '.card-order__price',
   CARD_CHAR: '.card__characteristic',
-  EMPTY_CART: '.goods__card-empty'
+  EMPTY_CART: '.goods__card-empty',
+  PAYMENT_CARD_STATUS: '.payment__card-status',
+  CHECKOUT_FORM: '.checkout-form'
 };
 
 var goodsNames = [
@@ -473,6 +475,10 @@ var deliverCourier = document.querySelector(classConst.DELIVER_COURIER);
 var deliverStoreInputs = deliverStore.querySelectorAll(classConst.BTN_INPUT);
 var deliverCourierInputs = deliverCourier.querySelectorAll(classConst.TEX_TINPUT);
 
+var deliverStreet = document.querySelector('#deliver__street');
+var deliverHouse = document.querySelector('#deliver__house');
+var deliverRoom = document.querySelector('#deliver__room');
+
 toggleDeliverStore.addEventListener('change', function () {
   if (toggleDeliverStore.checked) {
     deliverCourier.classList.add(classConst.VISUALLY_HIDDEN);
@@ -483,6 +489,10 @@ toggleDeliverStore.addEventListener('change', function () {
     deliverCourierInputs.forEach(function (element) {
       element.disabled = true;
     });
+
+    deliverStreet.required = true;
+    deliverHouse.required = true;
+    deliverRoom.required = true;
   }
 });
 
@@ -496,6 +506,10 @@ toggleDeliverCourier.addEventListener('change', function () {
     deliverStoreInputs.forEach(function (element) {
       element.disabled = true;
     });
+
+    deliverStreet.required = false;
+    deliverHouse.required = false;
+    deliverRoom.required = false;
   }
 });
 
@@ -591,5 +605,77 @@ catalogCards.addEventListener('click', function (evt) {
       }
       objectInCatalog.amount--;
     }
+  }
+});
+
+// Проверка полей ввода
+
+var cardStatus = document.querySelector(classConst.PAYMENT_CARD_STATUS);
+var paymentCardNumber = document.querySelector('#payment__card-number');
+var paymentCardCvc = document.querySelector('#payment__card-cvc');
+var paymentCardHolder = document.querySelector('#payment__cardholder');
+var paymentCardDate = document.querySelector('#payment__card-date');
+
+var validateByLuna = function (value) {
+  var summ = 0;
+  var values = value.split('');
+  values.forEach(function (element, index) {
+    element = parseInt(element, 10);
+    if (index % 2 === 0) {
+      element = element * 2;
+      if (element > 9) {
+        element = element - 9;
+      }
+    }
+    summ = summ + element;
+  });
+  if (!(summ % 10 === 0)) {
+    paymentCardNumber.setCustomValidity('Карты с таким номером не существует.');
+  }
+  return Boolean(!(summ % 10));
+};
+
+var validate = function (fields) {
+  var validationStatus = [];
+  fields.forEach(function (element) {
+    if (!element.value) {
+      validationStatus.push(false);
+    } else if (element.name === 'card-number') {
+      validationStatus.push(validateByLuna(element.value));
+    } else if ((element.name === 'card-cvc') && (element.value.match(/[0-9]/) === null)) {
+      validationStatus.push(false);
+      paymentCardCvc.setCustomValidity('CVC-код должен содержать только цифры.');
+    } else if ((element.name === 'cardholder') && !(element.value.match(/[0-9]/) === null)) {
+      paymentCardHolder.setCustomValidity('Имя держателя не должно содержать цифры.');
+      validationStatus.push(false);
+    } else if ((element.name === 'card-date') && (element.value.match(/\//) === null)) {
+      paymentCardDate.setCustomValidity('Заполните поле по шаблону: ММ/ГГ');
+      validationStatus.push(false);
+    }
+  });
+  for (var i = 0; i < validationStatus.length; i++) {
+    if (!validationStatus[i]) {
+      return false;
+    }
+  }
+  return true;
+};
+
+for (var i = 0; i < cardInputs.length; i++) {
+  cardInputs[i].addEventListener('blur', function () {
+    if (validate(cardInputs)) {
+      cardStatus.textContent = 'Одобрен';
+    } else {
+      cardStatus.textContent = 'Неизвестен';
+    }
+  });
+}
+
+var checkoutForm = document.querySelector(classConst.CHECKOUT_FORM);
+checkoutForm.addEventListener('submit', function () {
+  if (validate(cardInputs)) {
+    return true;
+  } else {
+    return false;
   }
 });
