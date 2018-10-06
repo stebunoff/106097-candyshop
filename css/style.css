@@ -1273,6 +1273,9 @@ body {
 .range__btn--right {
   right: 15%;
 }
+.range__btn--right:hover, .range__btn--left:hover {
+  cursor: pointer;
+}
 .range__fill-line {
   position: absolute;
   background-color: #6e58d9;
