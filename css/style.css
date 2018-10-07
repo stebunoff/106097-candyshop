@@ -1266,6 +1266,7 @@ body {
   padding: 0;
   font-size: 0;
   border-radius: 50%;
+  z-index: 1000;
 }
 .range__btn--left {
   left: 15%;
@@ -1360,4 +1361,13 @@ body {
 
 a:hover {
   cursor: pointer;
+}
+
+.noselect {
+  -webkit-touch-callout: none;
+    -webkit-user-select: none;
+     -khtml-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
 }
