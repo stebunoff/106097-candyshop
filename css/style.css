@@ -1266,12 +1266,16 @@ body {
   padding: 0;
   font-size: 0;
   border-radius: 50%;
+  z-index: 1000;
 }
 .range__btn--left {
   left: 15%;
 }
 .range__btn--right {
   right: 15%;
+}
+.range__btn--right:hover, .range__btn--left:hover {
+  cursor: pointer;
 }
 .range__fill-line {
   position: absolute;
@@ -1357,4 +1361,13 @@ body {
 
 a:hover {
   cursor: pointer;
+}
+
+.noselect {
+  -webkit-touch-callout: none;
+    -webkit-user-select: none;
+     -khtml-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
 }
