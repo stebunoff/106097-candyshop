@@ -154,6 +154,7 @@
       openPopup(modalFailure);
       return false;
     }
+    return true;
   });
 
   var openPopup = function (popup) {
