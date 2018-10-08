@@ -72,7 +72,7 @@
     cardInCartPrice.textContent = obj.price + ' ₽';
 
     var cardInCartImg = newCard.querySelector(window.data.classConst.CARD_ORDER_IMG);
-    cardInCartImg.src = obj.picture;
+    cardInCartImg.src = 'img/cards/' + obj.picture;
     cardInCartImg.alt = obj.name;
 
     var cardInCartAmount = newCard.querySelector(window.data.classConst.ORDERED_NUMBER);
@@ -95,7 +95,7 @@
         return object.name === productName;
       };
 
-      var objectInCatalog = window.data.goods.find(isProductName);
+      var objectInCatalog = window.goods.find(isProductName);
       if (objectInCatalog.amount > 0) {
         objectInCatalog.amount--;
         var objectInCart = goodsInCart.find(isProductName);
@@ -112,7 +112,7 @@
         return object.name === productName;
       };
 
-      var objectInCatalog = window.data.goods.find(isProductName);
+      var objectInCatalog = window.goods.find(isProductName);
 
       var productAmountLabel = evt.target.closest(window.data.classConst.CARD_ORDER_AMOUNT);
       var productCount = productAmountLabel.querySelector(window.data.classConst.ORDERED_NUMBER);
@@ -137,7 +137,7 @@
 
   // Избранное
 
-  window.data.catalogCards.addEventListener('click', function (evt) {
+  window.data.other.catalogCards.addEventListener('click', function (evt) {
     if (evt.target.classList.contains('card__btn-favorite')) {
       evt.target.classList.toggle('card__btn-favorite--selected');
     }
@@ -179,7 +179,7 @@
 
   var cardsEmpty = document.querySelector(window.data.classConst.EMPTY_CART);
 
-  window.data.catalogCards.addEventListener('click', function (evt) {
+  window.data.other.catalogCards.addEventListener('click', function (evt) {
     if (evt.target.classList.contains('card__btn')) {
       var currentProduct = evt.target.closest(window.data.classConst.CATALOG_CARD);
       var productName = currentProduct.querySelector(window.data.classConst.CARD_TITLE).textContent;
@@ -188,9 +188,9 @@
         return obj.name === productName;
       };
 
-      var objectInCatalog = window.data.goods.find(isProductName);
+      var objectInCatalog = window.goods.find(isProductName);
       if (objectInCatalog.amount > 0) {
-        var productObject = copyObject(window.data.goods, productName);
+        var productObject = copyObject(window.goods, productName);
         var modifiedObject = modifyObject(productObject);
         if (findObject(goodsInCart, productName)) {
           var objectInCart = goodsInCart.find(isProductName);

@@ -144,14 +144,17 @@
   var checkoutForm = document.querySelector(window.data.classConst.CHECKOUT_FORM);
   var modalSuccess = document.querySelector(window.data.classConst.MODAL_SUCCESS);
   var modalFailure = document.querySelector(window.data.classConst.MODAL_FAILURE);
-  checkoutForm.addEventListener('submit', function () {
+  checkoutForm.addEventListener('submit', function (evt) {
     if (validate(cardInputs)) {
-      openPopup(modalSuccess);
-      return true;
+      window.backend.upload(new FormData(checkoutForm), function () {
+        openPopup(modalSuccess);
+      });
+      evt.preventDefault();
     } else {
       openPopup(modalFailure);
       return false;
     }
+    return true;
   });
 
   var openPopup = function (popup) {
