@@ -50,43 +50,47 @@
       MODAL_FAILURE: '.modal--failure',
       MODAL_CLOSE: '.modal__close',
       MODAL_HIDDEN: 'modal--hidden'
-    },
-    keycodes: {
-      ESC: 27,
-      ENTER: 13
     }
   };
+  window.data.keycodes = {
+    ESC: 27,
+    ENTER: 13
+  };
+  window.data.other = {
+    catalogCards: document.querySelector(window.data.classConst.CATALOG_CARDS),
+    catalogLoad: document.querySelector(window.data.classConst.CATALOG_LOAD)
+  };
 
-  var goodsNames = [
-    'Чесночные сливки',
-    'Огуречный педант',
-    'Молочная хрюша',
-    'Грибной шейк',
-    'Баклажановое безумие',
-    'Паприколу итальяно',
-    'Нинзя-удар васаби',
-    'Хитрый баклажан',
-    'Горчичный вызов',
-    'Кедровая липучка',
-    'Корманный портвейн',
-    'Чилийский задира',
-    'Беконовый взрыв',
-    'Арахис vs виноград',
-    'Сельдерейная душа',
-    'Початок в бутылке',
-    'Чернющий мистер чеснок',
-    'Раша федераша',
-    'Кислая мина',
-    'Кукурузное утро',
-    'Икорный фуршет',
-    'Новогоднее настроение',
-    'С пивком потянет',
-    'Мисс креветка',
-    'Бесконечный взрыв',
-    'Невинные винные',
-    'Бельгийское пенное',
-    'Острый язычок'
-  ];
+  // var goodsNames = [
+  //   'Чесночные сливки',
+  //   'Огуречный педант',
+  //   'Молочная хрюша',
+  //   'Грибной шейк',
+  //   'Баклажановое безумие',
+  //   'Паприколу итальяно',
+  //   'Нинзя-удар васаби',
+  //   'Хитрый баклажан',
+  //   'Горчичный вызов',
+  //   'Кедровая липучка',
+  //   'Корманный портвейн',
+  //   'Чилийский задира',
+  //   'Беконовый взрыв',
+  //   'Арахис vs виноград',
+  //   'Сельдерейная душа',
+  //   'Початок в бутылке',
+  //   'Чернющий мистер чеснок',
+  //   'Раша федераша',
+  //   'Кислая мина',
+  //   'Кукурузное утро',
+  //   'Икорный фуршет',
+  //   'Новогоднее настроение',
+  //   'С пивком потянет',
+  //   'Мисс креветка',
+  //   'Бесконечный взрыв',
+  //   'Невинные винные',
+  //   'Бельгийское пенное',
+  //   'Острый язычок'
+  // ];
 
   var goodsConst = {
     GOODS_NUMBER: 26,
@@ -115,121 +119,119 @@
     IMG_TYPE: '.jpg'
   };
 
-  var goodsComponents = [
-    'молоко',
-    'сливки',
-    'вода',
-    'пищевой краситель',
-    'патока',
-    'ароматизатор бекона',
-    'ароматизатор свинца',
-    'ароматизатор дуба, идентичный натуральному',
-    'ароматизатор картофеля',
-    'лимонная кислота',
-    'загуститель',
-    'эмульгатор',
-    'консервант: сорбат калия',
-    'посолочная смесь: соль, нитрит натрия',
-    'ксилит',
-    'карбамид',
-    'вилларибо',
-    'виллабаджо'
-  ];
+  // var goodsComponents = [
+  //   'молоко',
+  //   'сливки',
+  //   'вода',
+  //   'пищевой краситель',
+  //   'патока',
+  //   'ароматизатор бекона',
+  //   'ароматизатор свинца',
+  //   'ароматизатор дуба, идентичный натуральному',
+  //   'ароматизатор картофеля',
+  //   'лимонная кислота',
+  //   'загуститель',
+  //   'эмульгатор',
+  //   'консервант: сорбат калия',
+  //   'посолочная смесь: соль, нитрит натрия',
+  //   'ксилит',
+  //   'карбамид',
+  //   'вилларибо',
+  //   'виллабаджо'
+  // ];
 
-  var goodsPictures = [
-    'gum-cedar',
-    'gum-chile',
-    'gum-eggplant',
-    'gum-mustard',
-    'gum-portwine',
-    'gum-wasabi',
-    'ice-cucumber',
-    'ice-eggplant',
-    'ice-garlic',
-    'ice-italian',
-    'ice-mushroom',
-    'ice-pig',
-    'marmalade-beer',
-    'marmalade-caviar',
-    'marmalade-corn',
-    'marmalade-new-year',
-    'marmalade-sour',
-    'marshmallow-bacon',
-    'marshmallow-beer',
-    'marshmallow-shrimp',
-    'marshmallow-spicy',
-    'marshmallow-wine',
-    'soda-bacon',
-    'soda-celery',
-    'soda-cob',
-    'soda-garlic',
-    'soda-peanut-grapes',
-    'soda-russian'
-  ];
+  // var goodsPictures = [
+  //   'gum-cedar',
+  //   'gum-chile',
+  //   'gum-eggplant',
+  //   'gum-mustard',
+  //   'gum-portwine',
+  //   'gum-wasabi',
+  //   'ice-cucumber',
+  //   'ice-eggplant',
+  //   'ice-garlic',
+  //   'ice-italian',
+  //   'ice-mushroom',
+  //   'ice-pig',
+  //   'marmalade-beer',
+  //   'marmalade-caviar',
+  //   'marmalade-corn',
+  //   'marmalade-new-year',
+  //   'marmalade-sour',
+  //   'marshmallow-bacon',
+  //   'marshmallow-beer',
+  //   'marshmallow-shrimp',
+  //   'marshmallow-spicy',
+  //   'marshmallow-wine',
+  //   'soda-bacon',
+  //   'soda-celery',
+  //   'soda-cob',
+  //   'soda-garlic',
+  //   'soda-peanut-grapes',
+  //   'soda-russian'
+  // ];
 
-  var generateRandomInteger = function (min, max) {
-    return Math.floor(Math.random() * (max + 1 - min) + min);
-  };
+  // var generateRandomInteger = function (min, max) {
+  //   return Math.floor(Math.random() * (max + 1 - min) + min);
+  // };
 
-  var generateRandomBoolean = function () {
-    var booleanRandom = Math.random() > 0.5;
-    return Boolean(booleanRandom);
-  };
+  // var generateRandomBoolean = function () {
+  //   var booleanRandom = Math.random() > 0.5;
+  //   return Boolean(booleanRandom);
+  // };
 
-  var pickRandomItem = function (array) {
-    return array[generateRandomInteger(0, array.length - 1)];
-  };
+  // var pickRandomItem = function (array) {
+  //   return array[generateRandomInteger(0, array.length - 1)];
+  // };
 
-  var generateNutritionContents = function (array) {
-    var nutritionContents = [];
-    var contentsLength = generateRandomInteger(1, array.length);
-    for (var i = 0; i < contentsLength; i++) {
-      var nutritionComponent = pickRandomItem(array);
-      if (nutritionContents.indexOf(nutritionComponent) !== -1) {
-        nutritionContents.push(nutritionComponent);
-      }
-    }
+  // var generateNutritionContents = function (array) {
+  //   var nutritionContents = [];
+  //   var contentsLength = generateRandomInteger(1, array.length);
+  //   for (var i = 0; i < contentsLength; i++) {
+  //     var nutritionComponent = pickRandomItem(array);
+  //     if (nutritionContents.indexOf(nutritionComponent) !== -1) {
+  //       nutritionContents.push(nutritionComponent);
+  //     }
+  //   }
 
-    var contents = '';
-    for (var j = 0; nutritionContents.length; j++) {
-      contents = contents + ', ' + nutritionContents[j];
-    }
-    return contents;
-  };
+  //   var contents = '';
+  //   for (var j = 0; nutritionContents.length; j++) {
+  //     contents = contents + ', ' + nutritionContents[j];
+  //   }
+  //   return contents;
+  // };
 
-  window.data.goods = [];
+  // var generateGoods = function (array, goodsNumber) {
+  //   for (var i = 0; i < goodsNumber; i++) {
+  //     var productName = pickRandomItem(goodsNames);
+  //     var productPicture = goodsConst.IMG_PATH + pickRandomItem(goodsPictures) + goodsConst.IMG_TYPE;
+  //     var productAmount = generateRandomInteger(goodsConst.AMOUNT_MIN, goodsConst.AMOUNT_MAX);
+  //     var productPrice = generateRandomInteger(goodsConst.PRICE_MIN, goodsConst.PRICE_MAX);
+  //     var productWeight = generateRandomInteger(goodsConst.WEIGHT_MIN, goodsConst.WEIGHT_MAX);
+  //     var productRaitingValue = generateRandomInteger(goodsConst.RAITING_VALUE_MIN, goodsConst.RAITING_VALUE_MAX);
+  //     var productRaitingNumber = generateRandomInteger(goodsConst.RAITING_NUMBER_MIN, goodsConst.RAITING_NUMBER_MAX);
+  //     var productEnergy = generateRandomInteger(goodsConst.ENERGY_MIN, goodsConst.ENERGY_MAX);
 
-  var generateGoods = function (array, goodsNumber) {
-    for (var i = 0; i < goodsNumber; i++) {
-      var productName = pickRandomItem(goodsNames);
-      var productPicture = goodsConst.IMG_PATH + pickRandomItem(goodsPictures) + goodsConst.IMG_TYPE;
-      var productAmount = generateRandomInteger(goodsConst.AMOUNT_MIN, goodsConst.AMOUNT_MAX);
-      var productPrice = generateRandomInteger(goodsConst.PRICE_MIN, goodsConst.PRICE_MAX);
-      var productWeight = generateRandomInteger(goodsConst.WEIGHT_MIN, goodsConst.WEIGHT_MAX);
-      var productRaitingValue = generateRandomInteger(goodsConst.RAITING_VALUE_MIN, goodsConst.RAITING_VALUE_MAX);
-      var productRaitingNumber = generateRandomInteger(goodsConst.RAITING_NUMBER_MIN, goodsConst.RAITING_NUMBER_MAX);
-      var productEnergy = generateRandomInteger(goodsConst.ENERGY_MIN, goodsConst.ENERGY_MAX);
+  //     array[i] = {
+  //       name: productName,
+  //       picture: productPicture,
+  //       amount: productAmount,
+  //       price: productPrice,
+  //       weight: productWeight,
+  //       rating: {
+  //         value: productRaitingValue,
+  //         number: productRaitingNumber
+  //       },
+  //       nutritionFacts: {
+  //         sugar: generateRandomBoolean(),
+  //         energy: productEnergy,
+  //         contents: generateNutritionContents(goodsComponents)
+  //       }
+  //     };
+  //   }
+  // };
 
-      array[i] = {
-        name: productName,
-        picture: productPicture,
-        amount: productAmount,
-        price: productPrice,
-        weight: productWeight,
-        rating: {
-          value: productRaitingValue,
-          number: productRaitingNumber
-        },
-        nutritionFacts: {
-          sugar: generateRandomBoolean(),
-          energy: productEnergy,
-          contents: generateNutritionContents(goodsComponents)
-        }
-      };
-    }
-  };
-
-  generateGoods(window.data.goods, goodsConst.GOODS_NUMBER);
+  // generateGoods(window.data.goods, goodsConst.GOODS_NUMBER);
 
   var generateTextRaiting = function (raiting) {
     var raitingClass = '';
@@ -255,8 +257,6 @@
     return raitingClass;
   };
 
-  window.data.catalogCards = document.querySelector(window.data.classConst.CATALOG_CARDS);
-  window.data.catalogLoad = document.querySelector(window.data.classConst.CATALOG_LOAD);
 
   var goodsCreator = function (array) {
     var template = document.querySelector(window.data.classConst.CARD).content.querySelector(window.data.classConst.CATALOG_CARD);
@@ -278,7 +278,7 @@
       cardTitle.textContent = array[i].name;
 
       var cardImg = newCard.querySelector(window.data.classConst.CARD_IMG);
-      cardImg.src = array[i].picture;
+      cardImg.src = 'img/cards/' + array[i].picture;
       cardImg.alt = array[i].name;
 
       var cardPrice = newCard.querySelector(window.data.classConst.CARD_PRICE);
@@ -303,14 +303,24 @@
       fragment.appendChild(newCard);
     }
 
-    window.data.catalogCards.appendChild(fragment);
+    window.data.other.catalogCards.appendChild(fragment);
 
 
-    window.data.catalogCards.classList.remove('catalog__cards--load');
-    window.data.catalogLoad.classList.add(window.data.classConst.VISUALLY_HIDDEN);
+    window.data.other.catalogCards.classList.remove('catalog__cards--load');
+    window.data.other.catalogLoad.classList.add(window.data.classConst.VISUALLY_HIDDEN);
   };
 
-  goodsCreator(window.data.goods);
+  window.backend.load(goodsCreator, window.backend.onError);
+
+  var goods = [];
+  var getData = function (array) {
+    array.forEach(function (element) {
+      goods.push(element);
+    });
+  };
+  window.backend.load(getData, window.backend.onError);
+  goodsCreator(goods);
+  window.goods = goods;
 
   window.data.cardsHolder = document.querySelector(window.data.classConst.GOODS_CARDS);
   window.data.cardsHolder.classList.remove('goods__cards--empty');
