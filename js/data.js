@@ -177,7 +177,6 @@
   window.backend.load(getData, window.backend.onError);
   window.data.goodsCreator(goods);
   window.goods = goods;
-  console.log(goods);
 
   window.data.cardsHolder = document.querySelector(window.data.classConst.GOODS_CARDS);
   window.data.cardsHolder.classList.remove('goods__cards--empty');

@@ -319,7 +319,6 @@
     var uniqueGoods = window.favorite.filter(function (it, i) {
       return window.favorite.indexOf(it) === i;
     });
-    console.log(uniqueGoods);
     if (uniqueGoods.length === 0) {
       renderMessage();
     }
