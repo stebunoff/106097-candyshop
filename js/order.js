@@ -53,9 +53,9 @@
         element.disabled = true;
       });
 
-      deliverStreet.required = true;
-      deliverHouse.required = true;
-      deliverRoom.required = true;
+      deliverStreet.required = false;
+      deliverHouse.required = false;
+      deliverRoom.required = false;
     }
   });
 
@@ -70,9 +70,9 @@
         element.disabled = true;
       });
 
-      deliverStreet.required = false;
-      deliverHouse.required = false;
-      deliverRoom.required = false;
+      deliverStreet.required = true;
+      deliverHouse.required = true;
+      deliverRoom.required = true;
     }
   });
 
@@ -149,12 +149,10 @@
       window.backend.upload(new FormData(checkoutForm), function () {
         openPopup(modalSuccess);
       });
-      evt.preventDefault();
     } else {
       openPopup(modalFailure);
-      return false;
     }
-    return true;
+    evt.preventDefault();
   });
 
   var openPopup = function (popup) {

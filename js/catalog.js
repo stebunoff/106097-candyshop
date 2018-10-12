@@ -137,11 +137,21 @@
 
   // Избранное
 
+  window.favorite = [];
   window.data.other.catalogCards.addEventListener('click', function (evt) {
     if (evt.target.classList.contains('card__btn-favorite')) {
       evt.target.classList.toggle('card__btn-favorite--selected');
-    }
+      var currentProduct = evt.target.closest(window.data.classConst.CATALOG_CARD);
+      var productName = currentProduct.querySelector(window.data.classConst.CARD_TITLE).textContent;
 
+      var isProductName = function (obj) {
+        return obj.name === productName;
+      };
+
+      var objectInFav = window.goods.find(isProductName);
+
+      window.favorite.push(objectInFav);
+    }
   });
 
   // Добавление в корзину

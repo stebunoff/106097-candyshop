@@ -113,7 +113,7 @@
   };
 
 
-  var goodsCreator = function (array) {
+  window.data.goodsCreator = function (array) {
     var template = document.querySelector(window.data.classConst.CARD).content.querySelector(window.data.classConst.CATALOG_CARD);
     var fragment = document.createDocumentFragment();
 
@@ -121,9 +121,10 @@
     for (var i = 0; i < array.length; i++) {
       var newCard = template.cloneNode(true);
 
+      newCard.classList.remove('card--in-stock');
       if (array[i].amount === 0) {
         newCard.classList.add('card--soon');
-      } else if (array[i].amount >= goodsConst.AMOUNT_LITTLE_MIN && array[i] < goodsConst.AMOUNT_LITTLE_MAX) {
+      } else if (array[i].amount >= goodsConst.AMOUNT_LITTLE_MIN && array[i].amount < goodsConst.AMOUNT_LITTLE_MAX) {
         newCard.classList.add('card--little');
       } else if (array[i].amount >= goodsConst.AMOUNT_LITTLE_MAX) {
         newCard.classList.add('card--in-stock');
@@ -165,7 +166,7 @@
     window.data.other.catalogLoad.classList.add(window.data.classConst.VISUALLY_HIDDEN);
   };
 
-  window.backend.load(goodsCreator, window.backend.onError);
+  window.backend.load(window.data.goodsCreator, window.backend.onError);
 
   var goods = [];
   var getData = function (array) {
@@ -174,8 +175,9 @@
     });
   };
   window.backend.load(getData, window.backend.onError);
-  goodsCreator(goods);
+  window.data.goodsCreator(goods);
   window.goods = goods;
+  console.log(goods);
 
   window.data.cardsHolder = document.querySelector(window.data.classConst.GOODS_CARDS);
   window.data.cardsHolder.classList.remove('goods__cards--empty');
