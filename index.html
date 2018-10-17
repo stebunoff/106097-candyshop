@@ -30,39 +30,39 @@
             <li class="input-btn">
               <input class="input-btn__input visually-hidden input-btn__input--checkbox" name="food-type" value="icecream" type="checkbox" id="filter-icecream" >
               <label class="input-btn__label input-btn__label--checkbox" for="filter-icecream">Мороженное</label>
-              <span class="input-btn__item-count">(7)</span>
+              <span class="input-btn__item-count">(0)</span>
             </li>
 
             <li class="input-btn">
               <input class="input-btn__input visually-hidden input-btn__input--checkbox" name="food-type" value="soda" type="checkbox" id="filter-soda" >
               <label class="input-btn__label input-btn__label--checkbox" for="filter-soda">Газировка</label>
-              <span class="input-btn__item-count">(5)</span>
+              <span class="input-btn__item-count">(0)</span>
             </li>
 
             <li class="input-btn">
               <input class="input-btn__input visually-hidden input-btn__input--checkbox" name="food-type" value="gum" type="checkbox" id="filter-gum" >
               <label class="input-btn__label input-btn__label--checkbox" for="filter-gum">Жевательная резинка</label>
-              <span class="input-btn__item-count">(6)</span>
+              <span class="input-btn__item-count">(0)</span>
             </li>
 
             <li class="input-btn">
               <input class="input-btn__input visually-hidden input-btn__input--checkbox" name="food-type" value="marmalade" type="checkbox" id="filter-marmalade" >
               <label class="input-btn__label input-btn__label--checkbox" for="filter-marmalade">Мармелад</label>
-              <span class="input-btn__item-count">(7)</span>
+              <span class="input-btn__item-count">(0)</span>
             </li>
 
             <li class="input-btn">
               <input class="input-btn__input visually-hidden input-btn__input--checkbox" name="food-type" value="marshmallows" type="checkbox" id="filter-marshmallows" >
               <label class="input-btn__label input-btn__label--checkbox" for="filter-marshmallows">Зефир</label>
-              <span class="input-btn__item-count">(6)</span>
+              <span class="input-btn__item-count">(0)</span>
             </li>
           </ul>
 
           <ul class="catalog__filter">
             <li class="input-btn">
-              <input class="input-btn__input visually-hidden input-btn__input--checkbox" name="food-property" value="sugar-free" type="checkbox" id="filter-sugar-free" >
+              <input class="input-btn__input visually-hidden input-btn__input--checkbox" name="food-property" value="sugar" type="checkbox" id="filter-sugar-free" >
               <label class="input-btn__label input-btn__label--checkbox" for="filter-sugar-free">Без сахара</label>
-              <span class="input-btn__item-count">(5)</span>
+              <span class="input-btn__item-count">(0)</span>
             </li>
 
             <li class="input-btn">
@@ -72,9 +72,9 @@
             </li>
 
             <li class="input-btn">
-              <input class="input-btn__input visually-hidden input-btn__input--checkbox" name="food-property" value="gluten-free" type="checkbox" id="filter-gluten-free" >
+              <input class="input-btn__input visually-hidden input-btn__input--checkbox" name="food-property" value="gluten" type="checkbox" id="filter-gluten-free" >
               <label class="input-btn__label input-btn__label--checkbox" for="filter-gluten-free">Безглютеновое</label>
-              <span class="input-btn__item-count">(3)</span>
+              <span class="input-btn__item-count">(0)</span>
             </li>
           </ul>
 
@@ -82,9 +82,9 @@
             <h3 class="visually-hidden">Слайдер</h3>
             <p class="range__price-count">Цена <span class="range__count">(23)</span></p>
             <div class="range__filter">
-              <button class="range__btn range__btn--left" type="button">левый ползунок</button>
+              <button class="range__btn range__btn--left" name="food-price-min" type="button">левый ползунок</button>
               <div class="range__fill-line"></div>
-              <button class="range__btn range__btn--right" type="button">правый ползунок</button>
+              <button class="range__btn range__btn--right" name="food-price-max" type="button">правый ползунок</button>
             </div>
             <div class="range__prices">
               <span class="range__price range__price--min noselect">0</span>
@@ -96,19 +96,19 @@
             <li class="input-btn">
               <input class="input-btn__input visually-hidden input-btn__input--checkbox" name="mark" value="favorite" type="checkbox" id="filter-favorite" >
               <label class="input-btn__label input-btn__label--checkbox" for="filter-favorite">Только избранное</label>
-              <span class="input-btn__item-count">(7)</span>
+              <span class="input-btn__item-count input-btn__item-fav-counter">(0)</span>
             </li>
 
             <li class="input-btn">
               <input class="input-btn__input visually-hidden input-btn__input--checkbox" name="mark" value="availability" type="checkbox" id="filter-availability" >
               <label class="input-btn__label input-btn__label--checkbox" for="filter-availability">В наличии</label>
-              <span class="input-btn__item-count">(7)</span>
+              <span class="input-btn__item-count">(0)</span>
             </li>
           </ul>
 
-          <ul class="catalog__filter">
+          <ul class="catalog__filter sorting">
             <li class="input-btn">
-              <input class="input-btn__input visually-hidden input-btn__input--radio" name="sort" value="popular" type="radio" id="filter-popular" checked>
+              <input class="input-btn__input visually-hidden input-btn__input--radio" name="sort" value="popular" type="radio" id="filter-popular">
               <label class="input-btn__label input-btn__label--radio" for="filter-popular">Сначала популярные</label>
             </li>
 
@@ -144,7 +144,7 @@
     <section class="buy">
       <h2 class="visually-hidden">Оформление покупки</h2>
 
-      <form class="checkout-form" action="/" method="post">
+      <form class="checkout-form" action="https://js.dump.academy/candyshop" method="post">
         <section class="goods">
           <div class="goods__wrap container">
             <h2 class="group-title goods__title" id="basket">Твои покупки</h2>
@@ -405,7 +405,7 @@
     <div class="modal__inner">
       <button class="modal__close" type="button">Закрыть окно</button>
       <h3 class="modal__title">Произошла ошибка!</h3>
-      <p class="modal__message">Код ошибки: 404.</p>
+      <p class="modal__message modal__message--code">Код ошибки: 404.</p>
       <p class="modal__message">Пожалуйста, перезагрузите страницу.</p>
     </div>
   </section>
@@ -428,7 +428,7 @@
         <div class="card__rating">
           <button class="card__btn-composition" type="button">Состав</button>
           <div class="card__stars stars">
-            <span class="stars__rating stars__rating--five">Рейтинг: 5 звёзд</span>
+            <span class="stars__rating">Рейтинг: 5 звёзд</span>
             <span class="star__count">(300)</span>
           </div>
         </div>
@@ -482,10 +482,19 @@
       <p>Попробуй ещё раз, нажав <span class="catalog__show-all">«Показать всё»</span> или посмотри что мы предлагаем тебе попробовать.</p>
     </div>
   </template>
+
+  <template id="currency-and-weight">
+    <span class="card__currency">₽</span><span class="card__weight">/ 70 Г</span>
+  </template>
+
+  <template id="goods-cart-total">
+    <span class="goods__price">0 ₽</span>
+  </template>
   <script src="js/backend.js"></script>
   <script src="js/data.js"></script>
   <script src="js/catalog.js"></script>
   <script src="js/order.js"></script>
   <script src="js/filter.js"></script>
+  <script src="js/sort.js"></script>
 </body>
 </html>

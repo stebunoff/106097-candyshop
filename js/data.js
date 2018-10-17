@@ -14,6 +14,7 @@
       STARS_RAITING: '.stars__rating',
       STAR_COUNT: '.star__count',
       CARD_COMPOSITION: '.card__composition-list',
+      CARD_COMPOSITION_BLOCK: '.card__composition',
       GOODS_CARDS: '.goods__cards',
       CONTACT_INPUTS: '.contact-data__inputs',
       TEXT_INPUT: '.text-input__input',
@@ -39,6 +40,7 @@
       CARD_CLOSE: '.card-order__close',
       CARD_ORDER_IMG: '.card-order__img',
       CARD_ORDER_PRICE: '.card-order__price',
+      CARD_ORDER: '.card-order',
       CARD_CHAR: '.card__characteristic',
       EMPTY_CART: '.goods__card-empty',
       PAYMENT_CARD_STATUS: '.payment__card-status',
@@ -61,29 +63,10 @@
     catalogLoad: document.querySelector(window.data.classConst.CATALOG_LOAD)
   };
 
-  var goodsConst = {
-    GOODS_NUMBER: 26,
-    GOODS_IN_CART: 3,
-
-    AMOUNT_MIN: 0,
+  window.data.goodsConst = {
     AMOUNT_LITTLE_MIN: 1,
     AMOUNT_LITTLE_MAX: 5,
-    AMOUNT_MAX: 20,
 
-    PRICE_MIN: 100,
-    PRICE_MAX: 1500,
-
-    WEIGHT_MIN: 30,
-    WEIGHT_MAX: 300,
-
-    RAITING_VALUE_MIN: 1,
-    RAITING_VALUE_MAX: 5,
-
-    RAITING_NUMBER_MIN: 10,
-    RAITING_NUMBER_MAX: 900,
-
-    ENERGY_MIN: 70,
-    ENERGY_MAX: 500,
     IMG_PATH: 'img/cards/',
     IMG_TYPE: '.jpg'
   };
@@ -108,76 +91,156 @@
         raitingClass = 'stars__rating--five';
     }
 
-
     return raitingClass;
   };
 
+  window.data.checkAmount = function (item, productClass) {
+    productClass.classList.remove('card--in-stock');
+    productClass.classList.remove('card--soon');
+    productClass.classList.remove('card--little');
+    if (item.amount === 0) {
+      productClass.classList.add('card--soon');
+    } else if (item.amount >= window.data.goodsConst.AMOUNT_LITTLE_MIN && item.amount < window.data.goodsConst.AMOUNT_LITTLE_MAX) {
+      productClass.classList.add('card--little');
+    } else if (item.amount >= window.data.goodsConst.AMOUNT_LITTLE_MAX) {
+      productClass.classList.add('card--in-stock');
+    }
+  };
 
   window.data.goodsCreator = function (array) {
     var template = document.querySelector(window.data.classConst.CARD).content.querySelector(window.data.classConst.CATALOG_CARD);
     var fragment = document.createDocumentFragment();
 
 
-    for (var i = 0; i < array.length; i++) {
+    array.forEach(function (item) {
       var newCard = template.cloneNode(true);
 
-      newCard.classList.remove('card--in-stock');
-      if (array[i].amount === 0) {
-        newCard.classList.add('card--soon');
-      } else if (array[i].amount >= goodsConst.AMOUNT_LITTLE_MIN && array[i].amount < goodsConst.AMOUNT_LITTLE_MAX) {
-        newCard.classList.add('card--little');
-      } else if (array[i].amount >= goodsConst.AMOUNT_LITTLE_MAX) {
-        newCard.classList.add('card--in-stock');
+      if (item.favorite) {
+        var favorite = newCard.querySelector('.card__btn-favorite');
+        favorite.classList.add('card__btn-favorite--selected');
       }
 
+      window.data.checkAmount(item, newCard);
+
       var cardTitle = newCard.querySelector(window.data.classConst.CARD_TITLE);
-      cardTitle.textContent = array[i].name;
+      cardTitle.textContent = item.name;
 
       var cardImg = newCard.querySelector(window.data.classConst.CARD_IMG);
-      cardImg.src = 'img/cards/' + array[i].picture;
-      cardImg.alt = array[i].name;
+      cardImg.src = 'img/cards/' + item.picture;
+      cardImg.alt = item.name;
 
       var cardPrice = newCard.querySelector(window.data.classConst.CARD_PRICE);
-      cardPrice.innerHTML = array[i].price + ' <span class="card__currency">₽</span><span class="card__weight">/ ' + array[i].weight + ' Г</span>';
+      cardPrice.innerHTML = item.price + ' ';
+
+      var renderCurrencyAndWeight = function (weight) {
+        var WeightTemplate = document.querySelector('#currency-and-weight').content;
+        var text = WeightTemplate.cloneNode(true);
+
+        var weightText = text.querySelector('.card__weight');
+        weightText.textContent = '/ ' + weight + ' Г';
+
+        cardPrice.appendChild(text);
+      };
+      renderCurrencyAndWeight(item.weight);
 
       var cardRaiting = newCard.querySelector(window.data.classConst.STARS_RAITING);
-      cardRaiting.classList.add = generateTextRaiting(array[i].rating.value);
+      var raiting = generateTextRaiting(item.rating.value);
+      cardRaiting.classList.add(raiting);
 
       var starCount = newCard.querySelector(window.data.classConst.STAR_COUNT);
-      starCount.textContent = '(' + array[i].rating.number + ')';
+      starCount.textContent = '(' + item.rating.number + ')';
 
       var cardCharacteristic = newCard.querySelector(window.data.classConst.CARD_CHAR);
-      if (array[i].nutritionFacts.sugar) {
-        cardCharacteristic.textContent = 'Содержит сахар. ' + array[i].nutritionFacts.energy + ' ккал';
+      if (item.nutritionFacts.sugar) {
+        cardCharacteristic.textContent = 'Содержит сахар. ' + item.nutritionFacts.energy + ' ккал';
       } else {
-        cardCharacteristic.textContent = 'Без сахара. ' + array[i].nutritionFacts.energy + ' ккал';
+        cardCharacteristic.textContent = 'Без сахара. ' + item.nutritionFacts.energy + ' ккал';
       }
 
       var cardComposition = newCard.querySelector(window.data.classConst.CARD_COMPOSITION);
-      cardComposition.textContent = array[i].nutritionFacts.contents;
+      cardComposition.textContent = item.nutritionFacts.contents;
+
+      var cardCompositon = newCard.querySelector('.card__main');
+      var cardCompositionBlock = newCard.querySelector(window.data.classConst.CARD_COMPOSITION_BLOCK);
+      cardCompositon.addEventListener('click', (function (block) {
+        return function () {
+          block.classList.toggle('card__composition--hidden');
+        };
+      })(cardCompositionBlock));
 
       fragment.appendChild(newCard);
-    }
+    });
 
     window.data.other.catalogCards.appendChild(fragment);
 
 
     window.data.other.catalogCards.classList.remove('catalog__cards--load');
     window.data.other.catalogLoad.classList.add(window.data.classConst.VISUALLY_HIDDEN);
+
   };
 
-  window.backend.load(window.data.goodsCreator, window.backend.onError);
+  var onDataLoad = function (array) {
+    window.goods = array;
+    window.data.goodsCreator(array);
+    var kindCounters = window.filterCounters(array, 'kind');
+    var nutritionCounters = window.filterNutritions(array);
+    var inStockCounters = window.filterInStock(array);
 
-  var goods = [];
-  var getData = function (array) {
-    array.forEach(function (element) {
-      goods.push(element);
+    var renderFilterCounts = function (countersArray, counter, whereToRender) {
+      var number = 0;
+      if (countersArray[counter]) {
+        number = countersArray[counter];
+      }
+      whereToRender.textContent = '(' + number + ')';
+    };
+
+    var itemCounts = document.querySelectorAll('.input-btn__item-count');
+    itemCounts.forEach(function (element) {
+      var inputBtn = element.closest('.input-btn');
+      var input = inputBtn.querySelector('.input-btn__input');
+      var inputValue = input.value;
+      var appropriateCounter;
+      switch (inputValue) {
+        case 'icecream':
+          appropriateCounter = 'Мороженое';
+          renderFilterCounts(kindCounters, appropriateCounter, element);
+          break;
+        case 'soda':
+          appropriateCounter = 'Газировка';
+          renderFilterCounts(kindCounters, appropriateCounter, element);
+          break;
+        case 'gum':
+          appropriateCounter = 'Жевательная резинка';
+          renderFilterCounts(kindCounters, appropriateCounter, element);
+          break;
+        case 'marmalade':
+          appropriateCounter = 'Мармелад';
+          renderFilterCounts(kindCounters, appropriateCounter, element);
+          break;
+        case 'marshmallows':
+          appropriateCounter = 'Зефир';
+          renderFilterCounts(kindCounters, appropriateCounter, element);
+          break;
+        case 'sugar':
+          appropriateCounter = 'count';
+          renderFilterCounts(nutritionCounters[0], appropriateCounter, element);
+          break;
+        case 'vegetarian':
+          appropriateCounter = 'count';
+          renderFilterCounts(nutritionCounters[1], appropriateCounter, element);
+          break;
+        case 'gluten':
+          appropriateCounter = 'count';
+          renderFilterCounts(nutritionCounters[2], appropriateCounter, element);
+          break;
+        case 'availability':
+          appropriateCounter = 'availability';
+          renderFilterCounts(inStockCounters, appropriateCounter, element);
+      }
     });
   };
-  window.backend.load(getData, window.backend.onError);
-  window.data.goodsCreator(goods);
-  window.goods = goods;
 
+  window.backend.load(onDataLoad, window.backend.onError);
   window.data.cardsHolder = document.querySelector(window.data.classConst.GOODS_CARDS);
   window.data.cardsHolder.classList.remove('goods__cards--empty');
 })();

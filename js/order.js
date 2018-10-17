@@ -79,65 +79,62 @@
   // Проверка полей ввода
 
   var cardStatus = document.querySelector(window.data.classConst.PAYMENT_CARD_STATUS);
-  var paymentCardNumber = document.querySelector('#payment__card-number');
-  var paymentCardCvc = document.querySelector('#payment__card-cvc');
-  var paymentCardHolder = document.querySelector('#payment__cardholder');
-  var paymentCardDate = document.querySelector('#payment__card-date');
 
-  var validateByLuna = function (value) {
-    var summ = 0;
-    var values = value.split('');
-    values.forEach(function (element, index) {
-      element = parseInt(element, 10);
-      if (index % 2 === 0) {
-        element = element * 2;
-        if (element > 9) {
-          element = element - 9;
+  var validateByLuhn = function (cardNumber) {
+    var numbers = [];
+    cardNumber = cardNumber.toString();
+    for (var i = 0; i < cardNumber.length; i++) {
+      if (i % 2 === 0) {
+        var m = parseInt(cardNumber[i], 10) * 2;
+        if (m > 9) {
+          numbers.push(m - 9);
+        } else {
+          numbers.push(m);
         }
+      } else {
+        var n = parseInt(cardNumber[i], 10);
+        numbers.push(n);
       }
-      summ = summ + element;
-    });
-    if (!(summ % 10 === 0)) {
-      paymentCardNumber.setCustomValidity('Карты с таким номером не существует.');
     }
+    var summ = numbers.reduce(function (a, b) {
+      return a + b;
+    });
     return Boolean(!(summ % 10));
   };
 
-  var validate = function (fields) {
-    var validationStatus = [];
-    fields.forEach(function (element) {
-      if (!element.value) {
-        validationStatus.push(false);
-      } else if (element.name === 'card-number') {
-        validationStatus.push(validateByLuna(element.value));
-      } else if ((element.name === 'card-cvc') && (element.value.match(/[0-9]/) === null)) {
-        validationStatus.push(false);
-        paymentCardCvc.setCustomValidity('CVC-код должен содержать только цифры.');
-      } else if ((element.name === 'cardholder') && !(element.value.match(/[0-9]/) === null)) {
-        paymentCardHolder.setCustomValidity('Имя держателя не должно содержать цифры.');
-        validationStatus.push(false);
-      } else if ((element.name === 'card-date') && (element.value.match(/\//) === null)) {
-        paymentCardDate.setCustomValidity('Заполните поле по шаблону: ММ/ГГ');
-        validationStatus.push(false);
-      }
-    });
-    for (var i = 0; i < validationStatus.length; i++) {
-      if (!validationStatus[i]) {
-        return false;
-      }
+  var validateCardForm = function () {
+    var paymentCardNumber = document.querySelector('#payment__card-number');
+    if (!validateByLuhn(paymentCardNumber.value)) {
+      paymentCardNumber.setCustomValidity('Карты не существует.');
+      return false;
+    }
+    var paymentCardCvc = document.querySelector('#payment__card-cvc');
+    if (paymentCardCvc.value.match(/[0-9]/) === null) {
+      paymentCardCvc.setCustomValidity('CVC-код должен содержать только цифры.');
+      return false;
+    }
+    var paymentCardHolder = document.querySelector('#payment__cardholder');
+    if (!(paymentCardHolder.value.match(/[0-9]/) === null)) {
+      paymentCardHolder.setCustomValidity('Имя держателя не должно содержать цифры.');
+      return false;
+    }
+    var paymentCardDate = document.querySelector('#payment__card-date');
+    if (paymentCardDate.value.match(/\//) === null) {
+      paymentCardDate.setCustomValidity('Заполните поле по шаблону: ММ/ГГ');
+      return false;
     }
     return true;
   };
 
-  for (var i = 0; i < cardInputs.length; i++) {
-    cardInputs[i].addEventListener('blur', function () {
-      if (validate(cardInputs)) {
+  cardInputs.forEach(function (field) {
+    field.addEventListener('blur', function () {
+      if (validateCardForm()) {
         cardStatus.textContent = 'Одобрен';
       } else {
         cardStatus.textContent = 'Неизвестен';
       }
     });
-  }
+  });
 
   // Отправка формы и всплывающее окно
 
@@ -145,19 +142,35 @@
   var modalSuccess = document.querySelector(window.data.classConst.MODAL_SUCCESS);
   var modalFailure = document.querySelector(window.data.classConst.MODAL_FAILURE);
   checkoutForm.addEventListener('submit', function (evt) {
-    if (validate(cardInputs)) {
-      window.backend.upload(new FormData(checkoutForm), function () {
-        openPopup(modalSuccess);
-      });
-    } else {
-      openPopup(modalFailure);
-    }
     evt.preventDefault();
+
+    window.backend.upload(new FormData(checkoutForm), function () {
+      openPopup(modalSuccess);
+    }, function () {
+      openPopup(modalFailure);
+    });
+
   });
 
-  var openPopup = function (popup) {
+  var openPopup = function (popup, text) {
     popup.classList.remove(window.data.classConst.MODAL_HIDDEN);
     document.addEventListener('keydown', onPopupEscPress);
+    if (popup === modalFailure) {
+      var code = popup.querySelector('.modal__message--code');
+      code.textContent = text;
+    }
+
+    modalClose.forEach(function (element) {
+      element.addEventListener('click', function (evt) {
+        closePopup(evt.target);
+      });
+      element.addEventListener('keydown', function (evt) {
+        if (evt.keyCode === window.data.keycodes.ENTER) {
+          evt.preventDefault();
+          closePopup(evt.target);
+        }
+      });
+    });
   };
 
   var modalClose = document.querySelectorAll(window.data.classConst.MODAL_CLOSE);
@@ -165,28 +178,18 @@
   var onPopupEscPress = function (evt) {
     if (evt.keyCode === window.data.keycodes.ESC) {
       evt.preventDefault();
-      closePopup();
+      var currentCloseBtn = document.querySelector('.modal:not(.modal--hidden) .modal__close');
+      closePopup(currentCloseBtn);
     }
   };
 
-  var closePopup = function () {
-    modalClose.forEach(function (element) {
-      element.classList.add(window.data.classConst.MODAL_HIDDEN);
-      document.removeEventListener('keydown', onPopupEscPress);
-    });
+  var closePopup = function (closeBtn) {
+    closeBtn.closest('.modal').classList.add(window.data.classConst.MODAL_HIDDEN);
+    checkoutForm.reset();
+    window.resetCart();
+    document.removeEventListener('keydown', onPopupEscPress);
   };
 
-  modalClose.forEach(function (element) {
-    element.addEventListener('click', function () {
-      closePopup();
-    });
-    element.addEventListener('keydown', function (evt) {
-      if (evt.keyCode === window.data.keycodes.ENTER) {
-        evt.preventDefault();
-        closePopup();
-      }
-    });
-  });
 
   // Выбор станции метро
 
